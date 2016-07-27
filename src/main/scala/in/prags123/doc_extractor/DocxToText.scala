@@ -32,21 +32,31 @@ object DocxToText {
       println(si.getLastSaveDateTime)
       println(si.getPageCount)
 
+      println("------- End of DOC File ----------")
+
+      println("------- Start of DOCX File ----------")
+
       // OPCPackage is used for handling XML based files, which is why we use docx instead of doc
       val docxFile = getClass.getResourceAsStream("/resume.docx")
       val pkg: OPCPackage = OPCPackage.open(docxFile)
       val props = new POIXMLProperties(pkg)
-      val ppropsPart = props.getCoreProperties().getUnderlyingProperties()
+      val coreProps = props.getCoreProperties
+      val ppropsPart = coreProps.getUnderlyingProperties()
       val created = ppropsPart.getCreatedProperty().getValue()
       println(created)
       val modified = ppropsPart.getModifiedProperty().getValue()
       println(modified)
       val lastModifiedBy = ppropsPart.getLastModifiedByProperty().getValue()
       println(lastModifiedBy)
+      val titleProperty = ppropsPart.getTitleProperty.getValue
+      println(titleProperty)
 
-      //val info:CoreProperties = extractor.getCoreProperties
-      //println(extractor)
+      val author = coreProps.getCreator
+      println(author)
+      val description = coreProps.getDescription
+      println(description)
 
+      println("------- End of DOCX File ----------")
     }
     catch {
       case ex: Exception => ex.printStackTrace()
